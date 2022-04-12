@@ -8,18 +8,11 @@ import java.sql.SQLException;
 
 import springBook.user.domain.User;
 
-public class UserDao {
-	
-	//인터페이스를 통해 오브젝트에 접근하므로 구체적인 클래스정보를 알 필요가 없다.
-	private ConnectionMaker connectionMaker;
-	
-	public UserDao(ConnectionMaker connectionMaker) {
-		 this.connectionMaker = connectionMaker;
-	}
+public abstract class AbstractUserDao {
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		
-		Connection conn = connectionMaker.makeConnection();
+		Connection conn = getConnection();
 	
 		String sql = "insert into users(id, name, passwd) values(?,?,?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -35,7 +28,7 @@ public class UserDao {
 	
 	public User get(String id) throws ClassNotFoundException, SQLException {
 		 
-		Connection conn = connectionMaker.makeConnection();
+		Connection conn = getConnection();
 		
 		String sql = "select * from users where id=?";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -55,4 +48,29 @@ public class UserDao {
 		return user;
 	}
 	
+	public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+
+	
+	public class NUserDao extends AbstractUserDao {
+
+		@Override
+		public Connection getConnection() throws ClassNotFoundException, SQLException {
+			
+			return null;
+		}
+		 
+	}
+	
+
+	public class DUserDao extends AbstractUserDao {
+
+		@Override
+		public Connection getConnection() throws ClassNotFoundException, SQLException {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		 
+	}
 }
+
+
